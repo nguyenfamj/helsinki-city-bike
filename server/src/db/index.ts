@@ -1,9 +1,10 @@
 import path from 'path';
-import { Pool } from 'pg';
+import { Pool, QueryResult, PoolClient } from 'pg';
 import { migrate } from 'postgres-migrations';
 
 require('dotenv').config();
 
+// Config to connect database in Docker
 const poolConfig = {
   database: process.env.DATABASE,
   user: process.env.DB_USER,
@@ -15,9 +16,10 @@ const poolConfig = {
   connectionTimeoutMillis: Number(process.env.DB_POOL_CLIENT_CONNECTIONS_TIMEOUT),
 };
 
-const pool = new Pool(poolConfig);
+const pool: Pool = new Pool(poolConfig);
 
 const db = {
+  // To run migrations to the database everytime there is new SQL file in db/migrations/sql folder
   runMigrations: async function (): Promise<void> {
     const client = await pool.connect();
     try {
@@ -27,6 +29,36 @@ const db = {
     } finally {
       client.release();
     }
+  },
+
+  // Customized query function for database
+  query: async function (text: string, params?: any): Promise<QueryResult<any>> {
+    const start: number = Date.now();
+    const res = await pool.query(text, params);
+    const duration = Date.now() - start;
+
+    console.log('query executed', { text, duration, rows: res.rowCount });
+
+    return res;
+  },
+
+  getClient: async function (): Promise<PoolClient> {
+    const client: PoolClient = await pool.connect();
+
+    const release = client.release;
+
+    // set a timeout of 5 seconds
+    const timeout = setTimeout(() => {
+      console.error('A client has been checked out for more than 5 seconds!');
+    }, 5000);
+
+    client.release = () => {
+      clearTimeout(timeout);
+
+      client.release = release;
+      return release.apply(client);
+    };
+    return client;
   },
 };
 
