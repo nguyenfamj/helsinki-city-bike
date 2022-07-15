@@ -30,10 +30,10 @@ export const getJourneys = async (req: Request, res: Response): Promise<void> =>
     // Success response
     res.status(200).json({
       success: true,
-      message: `Data in page ${page} retrieved successfully`,
+      message: `Journey data in page ${page} retrieved successfully`,
       totalRowCount: countRow[0].count,
       currentPage: page,
-      size: size,
+      size,
       journeys: journeyRows,
     });
   } catch (error) {
