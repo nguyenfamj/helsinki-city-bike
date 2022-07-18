@@ -12,3 +12,8 @@ COPY journey_data_staging(departure_time, return_time, departure_station_id, dep
 FROM '/var/rawData/2021-07.csv'
 DELIMITER ','
 CSV HEADER;
+
+COPY station_data(fid, station_id, fi_name, se_name, en_name, fi_address, se_address, fi_city, se_city, operator_name, capacity, longitude, latitude)
+FROM '/var/rawData/station-data.csv'
+DELIMITER ','
+CSV HEADER;

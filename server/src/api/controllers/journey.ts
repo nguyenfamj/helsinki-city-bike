@@ -19,7 +19,7 @@ export const getJourneys = async (req: Request, res: Response): Promise<void> =>
     const countQueryString: string = `SELECT COUNT(*) FROM journey_data ${
       search !== '' ? 'WHERE ts @@ to_tsquery($1)' : ''
     }`;
-    const journeysQueryString: string = `SELECT departure_time, return_time, departure_station_id, departure_station_name, return_station_id, return_station_name, covered_distance, duration FROM journey_data ${
+    const journeysQueryString: string = `SELECT fid, departure_time, return_time, departure_station_id, departure_station_name, return_station_id, return_station_name, covered_distance, duration FROM journey_data ${
       search !== '' ? 'WHERE ts @@ to_tsquery($3)' : ''
     } ORDER BY departure_time DESC LIMIT $1 OFFSET (($2 - 1) * $1)`;
 

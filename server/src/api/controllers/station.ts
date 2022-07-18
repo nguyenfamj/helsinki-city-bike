@@ -6,6 +6,8 @@ import { stationData } from '../interfaces/station';
 // Import helper functions
 import { fullTextSearchProcessor } from '../helpers/textProcessing';
 
+// @controllers GET api/stations
+// @desc Get all stations in the data base with pagination
 export const getStations = async (req: Request, res: Response): Promise<void> => {
   try {
     let { size, page, search } = req.query;
@@ -47,6 +49,8 @@ export const getStations = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
+// @controllers GET api/stations/:id
+// @desc Get data about single station
 export const getSingleStation = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id: station_id } = req.params;
@@ -107,31 +111,39 @@ export const getSingleStation = async (req: Request, res: Response): Promise<voi
       stationDataQueryString,
       stationDataParams
     );
-    await db.query(stationTempTableQueryString, tempTableParams);
-    const { rows: journeysFromStation } = await db.query(journeysFromStationQueryString);
-    const { rows: journeysToStation } = await db.query(journeysToStationQueryString);
-    const { rows: avgDistanceFromStation } = await db.query(avgDistanceFromStationQueryString);
-    const { rows: avgDistanceToStation } = await db.query(avgDistanceToStationQueryString);
-    const { rows: topPlacesFromStation } = await db.query(topPlacesFromStationQueryString);
-    const { rows: topPlacesToStation } = await db.query(topPlacesToStationQueryString);
-    await db.query(dropTempTable);
+    console.log('station DATA', stationData);
+    if (stationData[0]?.station_id) {
+      await db.query(stationTempTableQueryString, tempTableParams);
+      const { rows: journeysFromStation } = await db.query(journeysFromStationQueryString);
+      const { rows: journeysToStation } = await db.query(journeysToStationQueryString);
+      const { rows: avgDistanceFromStation } = await db.query(avgDistanceFromStationQueryString);
+      const { rows: avgDistanceToStation } = await db.query(avgDistanceToStationQueryString);
+      const { rows: topPlacesFromStation } = await db.query(topPlacesFromStationQueryString);
+      const { rows: topPlacesToStation } = await db.query(topPlacesToStationQueryString);
+      await db.query(dropTempTable);
 
-    // Success response
-    res.status(200).json({
-      success: true,
-      message: `Station ${stationData[0].fi_name} data retrieved successfully`,
-      stationData,
-      journeysFromStation: journeysFromStation[0].count,
-      journeysToStation: journeysToStation[0].count,
-      avgDistanceFromStation: avgDistanceFromStation[0].avg,
-      avgDistanceToStation: avgDistanceToStation[0].avg,
-      topPlacesFromStation,
-      topPlacesToStation,
-    });
-
-    console.log(`LOG: station's ${station_id} accessed`);
+      // Success response
+      res.status(200).json({
+        success: true,
+        message: `Station ${stationData[0].fi_name} data retrieved successfully`,
+        stationData,
+        journeysFromStation: journeysFromStation[0].count,
+        journeysToStation: journeysToStation[0].count,
+        avgDistanceFromStation: avgDistanceFromStation[0].avg,
+        avgDistanceToStation: avgDistanceToStation[0].avg,
+        topPlacesFromStation,
+        topPlacesToStation,
+      });
+      console.log(`LOG: station's ${station_id} accessed`);
+    } else {
+      res.status(404).json({ success: false, message: `Station ${station_id} not found` });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
+};
+
+export const createStation = async (req: Request, res: Response): Promise<void> => {
+  const {} = req.body;
 };
