@@ -144,6 +144,60 @@ export const getSingleStation = async (req: Request, res: Response): Promise<voi
   }
 };
 
-export const createStation = async (req: Request, res: Response): Promise<void> => {
-  const {} = req.body;
+export const createStation = async (
+  req: Request,
+  res: Response
+): Promise<Response<any, Record<string, any>>> => {
+  // Take relevant data from request body
+
+  const {
+    station_id,
+    fi_name,
+    se_name,
+    en_name,
+    fi_address,
+    se_address,
+    fi_city,
+    se_city,
+    operator_name,
+    capacity,
+    longitude,
+    latitude,
+  }: stationData = req.body;
+
+  if (!station_id || !fi_name)
+    return res
+      .status(400)
+      .json({ success: false, message: 'Station id and Finnish name is required for new station' });
+
+  try {
+    // Query params
+    const queryParams = [
+      station_id,
+      fi_name,
+      se_name,
+      en_name,
+      fi_address,
+      se_address,
+      fi_city,
+      se_city,
+      operator_name,
+      capacity,
+      longitude,
+      latitude,
+    ];
+
+    // Prepared query string
+    const createStationQueryString = `INSERT INTO station_data(station_id, fi_name, se_name, en_name, fi_address, se_address, fi_city, se_city, operator_name, capacity, longitude, latitude)
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+    RETURNING fid, station_id, fi_name, se_name, en_name, fi_address, se_address, fi_city, se_city, operator_name, capacity, longitude, latitude;`;
+
+    // Query initiation
+    const { rows } = await db.query(createStationQueryString, queryParams);
+
+    return res.json({ success: true, message: 'Station added successfully', returnedRow: rows[0] });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
 };

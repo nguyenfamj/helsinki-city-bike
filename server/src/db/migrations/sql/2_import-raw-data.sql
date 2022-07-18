@@ -17,3 +17,5 @@ COPY station_data(fid, station_id, fi_name, se_name, en_name, fi_address, se_add
 FROM '/var/rawData/station-data.csv'
 DELIMITER ','
 CSV HEADER;
+
+SELECT setval('station_data_fid_seq', (SELECT MAX(fid) FROM station_data) + 1);

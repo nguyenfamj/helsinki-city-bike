@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 // Import controllers
-import { getStations, getSingleStation } from '../controllers/station';
+import { getStations, getSingleStation, createStation } from '../controllers/station';
 
 // @route GET api/stations
 // @desc Get all stations in the data base with pagination
@@ -18,6 +18,6 @@ router.get('/:id', getSingleStation);
 // @route POST api/stations
 // @desc Create new station
 // @access Public
-// router.post('/');
+router.post('/', createStation);
 
 export default router;
