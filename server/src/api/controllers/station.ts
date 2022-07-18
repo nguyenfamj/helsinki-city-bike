@@ -149,7 +149,6 @@ export const createStation = async (
   res: Response
 ): Promise<Response<any, Record<string, any>>> => {
   // Take relevant data from request body
-
   const {
     station_id,
     fi_name,

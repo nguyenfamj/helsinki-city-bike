@@ -1,6 +1,5 @@
 CREATE TABLE journey_data_staging
 (
-    fid                    SERIAL PRIMARY KEY,
     departure_time         TIMESTAMP,
     return_time            TIMESTAMP,
     departure_station_id   int,
