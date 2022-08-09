@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import { NavDrawer } from './features/navdrawer/NavDrawer';
 import Journeys from '../components/features/journeys/Journeys';
 import Stations from '../components/features/stations/Stations';
+import SingleStation from '../components/features/singlestation/SingleStation';
 
 function App() {
   return (
@@ -16,8 +17,9 @@ function App() {
           <NavDrawer />
           <Routes>
             <Route path='/' element={<Navigate replace to='/journeys' />} />
-            <Route path='/journeys' element={<Journeys />} />
-            <Route path='/stations' element={<Stations />} />
+            <Route path='/journeys/*' element={<Journeys />} />
+            <Route path='/stations/*' element={<Stations />} />
+            <Route path='/stations/:id/*' element={<SingleStation />} />
           </Routes>
         </Box>
       </Router>

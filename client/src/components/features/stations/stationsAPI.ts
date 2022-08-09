@@ -5,7 +5,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { baseUrl } from '../../../constants';
 
 // Interfaces
-interface stationRow {
+export interface stationRow {
   station_id: number;
   fi_name: string;
   se_name: string;
@@ -39,7 +39,7 @@ export interface getStationsParams {
 // Create station
 
 export const stationsAPI = createApi({
-  reducerPath: 'stationsAPI',
+  reducerPath: 'stations',
   baseQuery: fetchBaseQuery({ baseUrl }),
   tagTypes: ['Stations'],
   endpoints: (builder) => ({

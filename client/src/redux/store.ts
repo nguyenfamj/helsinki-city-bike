@@ -4,6 +4,7 @@ import rootReducer from './reducers/index';
 // Import API for middleware configuration
 import { journeysAPI } from '../components/features/journeys/journeysAPI';
 import { stationsAPI } from '../components/features/stations/stationsAPI';
+import { singleStationAPI } from '../components/features/singlestation/singleStationAPI';
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -13,7 +14,8 @@ export const store = configureStore({
       serializableCheck: false,
     })
       .concat(journeysAPI.middleware)
-      .concat(stationsAPI.middleware),
+      .concat(stationsAPI.middleware)
+      .concat(singleStationAPI.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
