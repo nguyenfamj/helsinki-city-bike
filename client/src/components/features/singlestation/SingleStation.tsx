@@ -28,6 +28,7 @@ const SingleStation = () => {
   const { id: station_id } = useParams();
   const { data, isFetching, isLoading } = useGetSingleStationQuery({ station_id });
   const stationData = data?.stationData[0];
+
   return (
     <>
       {isFetching ? (
@@ -167,7 +168,7 @@ const SingleStation = () => {
               <Box sx={{ mt: '40px' }}>
                 <iframe
                   title='stationMap'
-                  src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyCIC_DTl58So-HHgLxlwOx6FgBmfEhknKk&q=${stationData?.latitude},${stationData?.longitude}`}
+                  src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_MAP_API_KEY}&q=${stationData?.latitude},${stationData?.longitude}`}
                   width='450'
                   height='250'
                 ></iframe>
