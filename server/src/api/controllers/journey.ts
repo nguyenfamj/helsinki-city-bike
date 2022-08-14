@@ -79,7 +79,7 @@ export const createJourney = async (
     // Prepared query string
     const createJourneyQueryString = `INSERT INTO journey_data(departure_time, return_time, departure_station_id, departure_station_name, return_station_id, return_station_name, covered_distance, duration)
     VALUES($1, $2, $3, $4, $5, $6, $7, $8)
-    RETURNING fid, departure_time, return_time, departure_station_id, departure_station_name, return_station_id, return_station_name, covered_distance, duration;`;
+    RETURNING id, departure_time, return_time, departure_station_id, departure_station_name, return_station_id, return_station_name, covered_distance, duration;`;
 
     // Query initiation
     const { rows } = await db.query(createJourneyQueryString, queryParams);

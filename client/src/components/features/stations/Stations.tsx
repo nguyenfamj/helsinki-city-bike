@@ -8,11 +8,19 @@ import Button from '@mui/material/Button';
 
 import SearchIcon from '@mui/icons-material/Search';
 
+// Import form components
+import InputDialog, { formStates, inputAttributes } from '../inputdialog/InputDialog';
+
 // Theme styling tool
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 // Import API query
-import { useGetStationsQuery, getStationsParams } from './stationsAPI';
+import {
+  useGetStationsQuery,
+  getStationsParams,
+  useCreateStationMutation,
+  createStationInput,
+} from './stationsAPI';
 import { useNavigate } from 'react-router-dom';
 
 // React Hooks
@@ -30,6 +38,93 @@ const pageTheme = createTheme({
   },
 });
 
+const stationInputs: inputAttributes[] = [
+  {
+    id: 'station_id',
+    name: 'station_id',
+    label: 'Station id',
+    type: 'number',
+    variant: 'standard',
+  },
+  {
+    id: 'fi_name',
+    name: 'fi_name',
+    label: 'Finnish name',
+    type: 'text',
+    variant: 'standard',
+  },
+  {
+    id: 'se_name',
+    name: 'se_name',
+    label: 'Swedish name',
+    type: 'text',
+    variant: 'standard',
+  },
+  {
+    id: 'en_name',
+    name: 'en_name',
+    label: 'English name',
+    type: 'text',
+    variant: 'standard',
+  },
+  {
+    id: 'fi_address',
+    name: 'fi_address',
+    label: 'Finnish address',
+    type: 'text',
+    variant: 'standard',
+  },
+  {
+    id: 'se_address',
+    name: 'se_address',
+    label: 'Swedish address',
+    type: 'text',
+    variant: 'standard',
+  },
+  {
+    id: 'fi_city',
+    name: 'fi_city',
+    label: 'Finnish city',
+    type: 'text',
+    variant: 'standard',
+  },
+  {
+    id: 'se_city',
+    name: 'se_city',
+    label: 'Swedish city',
+    type: 'text',
+    variant: 'standard',
+  },
+  {
+    id: 'operator_name',
+    name: 'operator_name',
+    label: 'Operator name',
+    type: 'text',
+    variant: 'standard',
+  },
+  {
+    id: 'capacity',
+    name: 'capacity',
+    label: 'Capacity',
+    type: 'text',
+    variant: 'standard',
+  },
+  {
+    id: 'longitude',
+    name: 'longitude',
+    label: 'Longitude',
+    type: 'number',
+    variant: 'standard',
+  },
+  {
+    id: 'latitude',
+    name: 'latitude',
+    label: 'Latitude',
+    type: 'number',
+    variant: 'standard',
+  },
+];
+
 const Stations = () => {
   // Query params state
   const [tableOptions, setTableOptions] = useState<getStationsParams>({
@@ -38,8 +133,14 @@ const Stations = () => {
     page: 1,
   });
 
+  // Control form
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+
   // Query from server
-  const { data, isFetching, isLoading, error, refetch } = useGetStationsQuery(tableOptions);
+  const { data, isFetching, isLoading, refetch } = useGetStationsQuery(tableOptions);
+
+  // Create station mutation
+  const [createStation, result] = useCreateStationMutation();
 
   // Navigate
   const navigate = useNavigate();
@@ -95,6 +196,27 @@ const Stations = () => {
   // Rows count state
   const [rowCountState, setRowCountState] = useState(data?.totalRowCount || 0);
 
+  // Forms
+  const initialCreateFormState: formStates = {
+    open: isFormOpen,
+    inputState: {
+      station_id: 0,
+      fi_name: '',
+      se_name: '',
+      en_name: '',
+      fi_address: '',
+      se_address: '',
+      fi_city: '',
+      se_city: '',
+      operator_name: '',
+      capacity: 0,
+      longitude: '',
+      latitude: '',
+    },
+    title: 'Stations',
+    type: 'create',
+  };
+
   // useEffect
   useEffect(() => {
     refetch(); // When disable this, the server side sorting is possible
@@ -114,8 +236,32 @@ const Stations = () => {
     navigate(`/stations/${params.row.station_id}`);
   };
 
+  // Handle form open
+  const handleFormOpen: () => void = () => {
+    setIsFormOpen(true);
+  };
+
+  // Handle form close
+  const handleFormClose: () => void = () => {
+    setIsFormOpen(false);
+  };
+
+  // handle form submit
+  const handleFormSubmit: (inputData: createStationInput) => void = (inputData) => {
+    const response = createStation(inputData).unwrap();
+
+    console.log(response);
+    handleFormClose();
+  };
+
   return (
     <>
+      <InputDialog
+        initialFormState={initialCreateFormState}
+        inputs={stationInputs}
+        handleClose={handleFormClose}
+        handleSubmit={handleFormSubmit}
+      />
       <ThemeProvider theme={pageTheme}>
         <Box
           sx={{
@@ -143,6 +289,7 @@ const Stations = () => {
               <Button
                 variant='contained'
                 sx={{ bgcolor: 'text.secondary', color: 'white', mr: '3rem' }}
+                onClick={handleFormOpen}
               >
                 Add station
               </Button>

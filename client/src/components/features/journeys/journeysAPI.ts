@@ -42,7 +42,7 @@ interface createJourneyResponse {
   returnedRow: journeyRow;
 }
 
-interface createJourneyInput {
+export interface createJourneyInput {
   departure_time: Date;
   return_time: Date;
   departure_station_id: number;

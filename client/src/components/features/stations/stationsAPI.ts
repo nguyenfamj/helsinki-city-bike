@@ -6,6 +6,7 @@ import { baseUrl } from '../../../constants';
 
 // Interfaces
 export interface stationRow {
+  fid: number;
   station_id: number;
   fi_name: string;
   se_name: string;
@@ -36,6 +37,40 @@ export interface getStationsParams {
   search?: string;
 }
 
+interface createStationResponse {
+  success: boolean;
+  message: string;
+  returnedRow: {
+    station_id: number;
+    fi_name: string;
+    se_name: string;
+    en_name: string;
+    fi_address: string;
+    se_address: string;
+    fi_city: string;
+    se_city: string;
+    operator_name: string;
+    capacity: number;
+    longitude: string;
+    latitude: string;
+  };
+}
+
+export interface createStationInput {
+  station_id: number;
+  fi_name: string;
+  se_name: string;
+  en_name: string;
+  fi_address: string;
+  se_address: string;
+  fi_city: string;
+  se_city: string;
+  operator_name: string;
+  capacity: number;
+  longitude: string;
+  latitude: string;
+}
+
 // Create station
 
 export const stationsAPI = createApi({
@@ -47,7 +82,11 @@ export const stationsAPI = createApi({
       query: (queryParams) => ({ url: 'stations', method: 'GET', params: queryParams }),
       providesTags: ['Stations'],
     }),
+    createStation: builder.mutation<createStationResponse, createStationInput>({
+      query: (queryBody) => ({ url: 'stations', method: 'POST', body: queryBody }),
+      invalidatesTags: ['Stations'],
+    }),
   }),
 });
 
-export const { useGetStationsQuery } = stationsAPI;
+export const { useGetStationsQuery, useCreateStationMutation } = stationsAPI;

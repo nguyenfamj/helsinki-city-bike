@@ -26,7 +26,7 @@ const pageTheme = createTheme({
 
 const SingleStation = () => {
   const { id: station_id } = useParams();
-  const { data, isFetching, isLoading } = useGetSingleStationQuery({ station_id });
+  const { data, isFetching } = useGetSingleStationQuery({ station_id });
   const stationData = data?.stationData[0];
 
   return (
