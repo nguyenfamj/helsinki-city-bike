@@ -11,6 +11,19 @@ Web application to display bike's journeys and list of station in Helsinki, whic
 - Refactoring client folder to suit Redux toolkit logic (Each feature will contain a slice of Redux)
 - Using MUI Grid for handle server-side pagination, filtering
 
+## Preview:
+
+**Journeys view**
+<img width="1552" alt="Screenshot 2022-09-24 at 16 56 02" src="https://user-images.githubusercontent.com/86949613/192101819-7e7601f1-6e4c-4d72-aff3-889bb823271f.png" >
+**Journeys view with search**
+<img width="1552" alt="Screenshot 2022-09-24 at 16 56 30" src="https://user-images.githubusercontent.com/86949613/192101851-5af54a1f-1b7d-4532-885d-4fc1dba6b531.png" >
+**Station view with search**
+<img width="1552" alt="Screenshot 2022-09-24 at 17 00 16" src="https://user-images.githubusercontent.com/86949613/192102033-2549a805-929a-4d0f-8e3e-6eb8527ebbb4.png">
+**Add Journey**
+<img width="1552" alt="Screenshot 2022-09-24 at 17 00 55" src="https://user-images.githubusercontent.com/86949613/192102063-e72b3ded-1ca4-4c0b-a89f-199a8b9d3b92.png">
+**Add Station**
+<img width="1552" alt="Screenshot 2022-09-24 at 17 01 16" src="https://user-images.githubusercontent.com/86949613/192102081-7385e6aa-a16d-4094-86ce-abd515f5521a.png">
+
 ## Pre-requisites
 
 - Docker
