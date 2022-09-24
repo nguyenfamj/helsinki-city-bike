@@ -1,94 +1,80 @@
-# Helsinki city bike app (Solita Dev Academy pre-assignment)
+# Helsinki city bike app
 
-The returned project for the Solita's pre-assignment
+Web application to display bike's journeys and list of station in Helsinki, which was extracted from 4 different CSV files
+
+## New things I've learned:
+
+- Setup a project with Docker using docker-compose and TypeScript (Maintainable project structure)
+- Using PostgreSQL for database, implement migrations from server side (using postgres-migrations)
+- Handle large size of data (3M lines), performing filtering and removing duplication
+- Implement pagination, sorting and full-text search server side
+- Refactoring client folder to suit Redux toolkit logic (Each feature will contain a slice of Redux)
+- Using MUI Grid for handle server-side pagination, filtering
+
+## Pre-requisites
+
+- Docker
+- Node.js
+- Download CSV file from HSL server
 
 ## Install project
 
-Clone the project from Github
+##### Do first
+
+Download CSV file about the bike journey data from HSL Server (3 separate files)
+
+- <https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv>
+- <https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv>
+- <https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv>
+
+Download CSV file about the bike stations here and rename it to **"station-data.csv"**
+<https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv>
+
+=>> _All downloaded files should be put in one folder, and you have to save this path for later use_
+
+##### Clone the project from Github
 
 ```bash
-git clone 'https://github.com/nguyenfamj/solita-academy-preassignment.git'
+# bash
+git clone 'https://github.com/nguyenfamj/helsinki-city-bike.git'
 ```
 
-## Stuff to do
+Open terminal and IDE (VSCode) in the cloned repository
+**1. Create new ".env" file based on ".env.example" 2. Change "RAW_CSV_PATH" value to the path of CSV files you have above**
 
-**Important!** Implementing all of the proposed features is not needed for a good exercise result. You may also concentrate on:
+```dotenv
+#Example .env file
+PORT=3001
 
-- Good documentation (readme/other docs)
-- Proper git usage (small commits, informative commit messages)
-- Tests
-- Getting features complete
-- Writing good code
+# DATABASE
+DB_HOST=db
+DB_USER=postgres
+DATABASE=city_bike_hel
+DB_PASSWORD=password
+DB_PORT=5432
+DB_POOL_SIZE=2
+DB_POOL_CLIENT_IDLE_TIMEOUT=10000
+DB_POOL_CLIENT_CONNECTION_TIMEOUT=2000
+WAIT_HOST=db:5432
+RAW_CSV_PATH=PATH_TO_FOLDER_CONTAINS_CSV_FILE
 
-Which are all highly valued in a good repository.
+# PAGINATION
+DEFAULT_PAGE_SIZE=50
+DEFAULT_PAGE_INDEX=1
+```
 
-You can read more about tips from Solita Dev Blog: [Do's and Dont's of Dev Academy Pre-assignments](https://dev.solita.fi/2021/11/04/how-to-pre-assignments.html)
+##### Run project
 
-## Functional requirements
+Change directory to the cloned repository, open terminal and run these commands. First time running the command, the containers will be stopped, because the database is not completely initialized. To solve the problem, just execute the command below once again in the terminal.
 
-Focus on the recommended features. For extra points, you might want to also complete some additional features. You can also come up with extra features, if you do, please document them in the readme!
+```bash
+docker-compose up -d --build && docker-compose logs -f
+```
 
-### Data import
+It will take a while for the migration process to complete. Then:
 
-#### Recommended
-
-- Import data from the CSV files to a database or in-memory storage
-- Validate data before importing
-- Don't import journeys that lasted for less than ten seconds
-- Don't import journeys that covered distances shorter than 10 meters
-
-### Journey list view
-
-#### Recommended
-
-- List journeys
-  - If you don't implement pagination, use some hard-coded limit for the list length because showing several million rows would make any browser choke
-- For each journey show departure and return stations, covered distance in kilometers and duration in minutes
-
-#### Additional
-
-- Pagination
-- Ordering per column
-- Searching
-- Filtering
-
-### Station list
-
-#### Recommended
-
-- List all the stations
-
-#### Additional
-
-- Pagination
-- Searching
-
-### Single station view
-
-#### Recommended
-
-- Station name
-- Station address
-- Total number of journeys starting from the station
-- Total number of journeys ending at the station
-
-#### Additional
-
-- Station location on the map
-- The average distance of a journey starting from the station
-- The average distance of a journey ending at the station
-- Top 5 most popular return stations for journeys starting from the station
-- Top 5 most popular departure stations for journeys ending at the station
-- Ability to filter all the calculations per month
-
-## Surprise us with
-
-- Endpoints to store new journeys data or new bicycle stations
-- Running backend in Docker
-- Running backend in Cloud
-- Implement E2E tests
-- Create UI for adding journeys or bicycle stations
-
-## Returning the exercise
-
-If you wish to apply to Dev Academy, make sure to add the link to your GitHub repository to the application.
+```bash
+cd client
+npm install
+npm run start
+```
